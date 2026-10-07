@@ -1,69 +1,152 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import productsJson from "@/data/products.json";
+import Header, { type RentalDates } from "@/components/Header";
+import CategoryStrip from "@/components/CategoryStrip";
+import Hero from "@/components/Hero";
+import SubCategoryRail from "@/components/SubCategoryRail";
+import ProductSection from "@/components/ProductSection";
+import type { Product } from "@/components/ProductCard";
+import FaqSection from "@/components/FaqSection";
+import ReviewsSection from "@/components/ReviewsSection";
+import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
+import ChatbotFab from "@/components/ChatbotFab";
+import DateModal from "@/components/DateModal";
+import { ChevronRightIcon } from "@/components/icons";
+
+const products = productsJson as Product[];
+
+/* Original breadcrumb: span-wrapped segments (not li) around a single clamped ol. */
+function Breadcrumb() {
+  return (
+    <nav aria-label="breadcrumb" className="container py-3 md:py-6">
+      <ol className="line-clamp-1 flex flex-wrap items-center justify-start gap-1.5 overflow-hidden break-words text-sm text-muted-foreground sm:gap-2.5">
+        <span className="inline-flex items-center gap-1.5">
+          <a
+            href="https://sharepal.in/bangalore"
+            className="text-sh7! font-semibold text-neutral-500 transition-colors hover:text-foreground hover:text-neutral-600 md:text-sh5!"
+          >
+            Bangalore
+          </a>
+          <li
+            role="presentation"
+            aria-hidden="true"
+            className="[&>svg]:h-3.5 [&>svg]:w-3.5"
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </li>
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            role="link"
+            aria-disabled="true"
+            aria-current="page"
+            className="text-sh7! font-semibold text-neutral-900 md:text-sh5!"
+          >
+            Gaming gadgets on rent
+          </span>
+        </span>
+      </ol>
+    </nav>
+  );
+}
 
 export default function Home() {
+  const [dates, setDates] = useState<RentalDates>(null);
+  const [dateOpen, setDateOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const [activeSub, setActiveSub] = useState("All");
+  const [doneReset, setDoneReset] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const handleAdd = (p: Product) => {
+    setCartCount((c) => c + 1);
+    setToast(`${p.name} added to cart`);
+    window.setTimeout(() => setToast(null), 2400);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <>
+      <Header
+        dates={dates}
+        onOpenDates={() => setDateOpen(true)}
+        cartCount={cartCount}
+      />
+
+      <main className="min-h-dvh">
+        <div className="min-h-screen w-full">
+          {/* ---------- hero area (strip + mobile hero) + catalogue grid ---------- */}
+          <div className="container mx-auto px-0 py-24 md:py-20">
+            <div className="relative max-md:pb-3">
+              <CategoryStrip />
+              <Hero variant="mobile" />
+            </div>
+
+            <div className="flex flex-row gap-2 px-2 max-md:pt-4 md:grid md:grid-cols-[100px_1fr] md:gap-8 md:px-0 lg:grid-cols-[120px_1fr]">
+              <SubCategoryRail active={activeSub} onChange={setActiveSub} />
+
+              <main className="min-w-0 flex-1">
+                <Hero variant="desktop" />
+                <div className="w-full">
+                  <ProductSection
+                    products={products}
+                    activeSub={activeSub}
+                    dates={dates}
+                    onAdd={handleAdd}
+                  />
+                </div>
+              </main>
+            </div>
+          </div>
+
+          <FaqSection />
+
+          <Breadcrumb />
+
+          <ReviewsSection />
         </div>
       </main>
-    </div>
+
+      <Footer />
+
+      <BottomNav
+        dates={dates}
+        onOpenDates={() => setDateOpen(true)}
+        onDone={() => setDoneReset(true)}
+        doneReset={doneReset}
+      />
+
+      <ChatbotFab />
+
+      {dateOpen && (
+        <DateModal
+          dates={dates}
+          onClose={() => setDateOpen(false)}
+          onApply={(d) => {
+            setDates(d);
+            setDoneReset(false);
+          }}
+        />
+      )}
+
+      {/* toast */}
+      <div
+        aria-live="polite"
+        className="pointer-events-none fixed left-1/2 top-4 z-[70] -translate-x-1/2 transition-all duration-300"
+        style={{
+          opacity: toast ? 1 : 0,
+          transform: `translate(-50%, ${toast ? "0" : "-16px"})`,
+        }}
+      >
+        {toast && (
+          <span className="flex items-center gap-2 rounded-full bg-primary-900 px-4 py-2.5 text-sh6 text-white shadow-lg">
+            <span className="h-2 w-2 rounded-full bg-[#7EC904]" />
+            {toast}
+          </span>
+        )}
+      </div>
+    </>
   );
 }

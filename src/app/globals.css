@@ -1,26 +1,423 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ---------- Fonts ---------- */
+  --font-ubuntu: var(--font-ubuntu), "Ubuntu", ui-sans-serif, system-ui, sans-serif;
+  --font-inter: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* ---------- SharePal primary palette ---------- */
+  --color-primary-50: #eef2fe;
+  --color-primary-100: #e0e7fd;
+  --color-primary-150: #d1dafa;
+  --color-primary-200: #bac7f8;
+  --color-primary-300: #758ff1;
+  --color-primary-400: #476aed;
+  --color-primary-500: #1945e8;
+  --color-primary-600: #1437ba;
+  --color-primary-700: #0f298b;
+  --color-primary-800: #0a1c5d;
+  --color-primary-850: #081546;
+  --color-primary-900: #030d31;
+
+  /* ---------- Neutrals ---------- */
+  --color-neutral-50: #fdfdfd;
+  --color-neutral-100: #fbfbfb;
+  --color-neutral-150: #f4f6f7;
+  --color-neutral-200: #e2e7ea;
+  --color-neutral-250: #ccd2d5;
+  --color-neutral-300: #b3bcc1;
+  --color-neutral-400: #9aa5ab;
+  --color-neutral-500: #767f85;
+  --color-neutral-600: #545c61;
+  --color-neutral-700: #3b4247;
+  --color-neutral-800: #22282c;
+  --color-neutral-900: #090a0b;
+
+  /* SharePal's own gray ramp (gray-100 is white, the page body carries the tone) */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #ffffff;
+  --color-gray-150: #f2f2f2;
+  --color-gray-200: #e3e3e3;
+
+  /* ---------- Accents ---------- */
+  --color-secondary-50: #fef6e7;
+  --color-secondary-200: #fde3b0;
+  --color-secondary-500: #f5b316;
+  --color-secondary-600: #dd9f09;
+  --color-secondary-900: #4d3604;
+  --color-category-purple: #8a2be2;
+  --color-decorative-orange: #e86419;
+  --color-decorative-pink: #e819ae;
+  --color-star: #e8ae19;
+  --color-success-500: #16a34a;
+
+  /* ---------- shadcn-style tokens used by the original markup ---------- */
+  --color-card: #ffffff;
+  --color-muted: #f4f6f7;
+  --color-muted-foreground: #767f85;
+  --color-foreground: #030d31;
+  --color-border: #e2e7ea;
+  --color-accent: #f4f6f7;
+  --color-destructive: #dc2626;
+
+  /* ---------- Radii ---------- */
+  --radius-4xl: 1.75rem;
+  --radius-radius: 28px;
+
+  /* ---------- Animations ---------- */
+  --animate-marquee: marquee 55s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 55s linear infinite;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.5s ease both;
+  --animate-pop: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-accordion-down: accordion-down 0.25s ease-out;
+  --animate-accordion-up: accordion-up 0.25s ease-out;
+  --animate-skeleton: skeleton 1.4s ease-in-out infinite;
+  --animate-ticker: ticker 18s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--accordion-height, 100%);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--accordion-height, 100%);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- SharePal typography scale ----------
+   Registered with @utility so Tailwind v4 variants (md:, lg:, hover:, ...) and
+   the trailing important modifier (text-sh2!) work on them. */
+@utility text-d3 {
+  font-size: 3rem;
+  line-height: 3.5rem;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+@utility text-d4 {
+  font-size: 2.75rem;
+  line-height: 3.25rem;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+@utility text-d5 {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  letter-spacing: -0.025rem;
+  font-weight: 700;
+}
+@utility text-d6 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  letter-spacing: -0.02rem;
+  font-weight: 700;
+}
+@utility text-d7 {
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+@utility text-h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  letter-spacing: -0.02rem;
+  font-weight: 700;
+}
+@utility text-h2 {
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  letter-spacing: -0.01rem;
+  font-weight: 700;
+}
+@utility text-h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 500;
+}
+@utility text-h4 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+@utility text-h5 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 500;
+}
+@utility text-h6 {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+}
+@utility text-sh1 {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+@utility text-sh2 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+}
+@utility text-sh3 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+@utility text-sh4 {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  font-weight: 700;
+}
+@utility text-sh5 {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+}
+@utility text-sh6 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+}
+@utility text-sh7 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+}
+@utility text-b2 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+@utility text-b4 {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+}
+@utility text-b5 {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+}
+@utility text-b6 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+}
+@utility text-b7 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 400;
+}
+@utility text-o3 {
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+  font-weight: 700;
+}
+@utility text-o4 {
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+  font-weight: 500;
+}
+@utility text-bt3 {
+  font-size: 0.875rem;
+  line-height: 1rem;
+  font-weight: 600;
+}
+@utility text-bt4 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+}
+@utility text-bt2 {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+/* ---------- SharePal page container ----------
+   In @layer components so core utilities like px-0 (used on the page
+   container) still win over the container's side padding, matching the
+   original's cascade order. */
+@layer components {
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 1216px;
+    padding-inline: 1rem;
+  }
+}
+
+/* ---------- Gradients used across SharePal ---------- */
+.bg-review-gradient {
+  background-image: linear-gradient(92deg, #002cd1 27.44%, #1945e8 48.86%, #7ec904 70.28%);
+}
+
+.bg-top-categories-gradient {
+  background-image: linear-gradient(90deg, #f4f6f7 0%, #e8ecfd 20%, #e8ecfd 80%, #f4f6f7 100%);
+}
+
+.bg-hero-gradient {
+  background-image: linear-gradient(360deg, #8a2be2 0%, #4c187c 100%);
+}
+
+.bg-zero-policy-title-card-text {
+  background-image: linear-gradient(90deg, #9771ff, #160766);
+}
+
+.bg-footer-logo {
+  background-image: linear-gradient(90deg, #030d31, #03134f);
+}
+
+/* ---------- reviews marquee (matches SharePal's animate-marquee-horizontal) ---------- */
+@keyframes marquee-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-horizontal {
+  animation: marquee-horizontal var(--duration, 40s) linear infinite;
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
+  background: #f3f5f6;
+  color: var(--color-neutral-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-primary-150);
+  color: var(--color-primary-900);
+}
+
+/* thin, subtle scrollbars for horizontal chip rows */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
